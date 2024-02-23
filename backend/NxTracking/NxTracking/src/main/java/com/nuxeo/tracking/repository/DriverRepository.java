@@ -10,6 +10,8 @@ import com.nuxeo.tracking.model.Driver;
 
 @Repository
 public interface DriverRepository extends JpaRepository<Driver, Long> { 
+	
+	List<Driver> findByNameContainingIgnoreCase(String name);
 
 	@Query("SELECT o FROM Driver o WHERE o.id = :id AND o.dateDelete IS NULL")
 	Driver findObjectId(Long id); 

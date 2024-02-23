@@ -21,55 +21,55 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.nuxeo.tracking.dto.CompanyDto;
-import com.nuxeo.tracking.model.Company;
-import com.nuxeo.tracking.service.CompanyService;
+import com.nuxeo.tracking.dto.CustomerDto;
+import com.nuxeo.tracking.model.Customer;
+import com.nuxeo.tracking.service.CustomerService;
 
 @RestController
-@RequestMapping("/api/v1/companies")
+@RequestMapping("/api/v1/customers")
 @CrossOrigin(origins="*") 
-public class CompanyResource {
+public class CustomerResource {
 	
-	private final Logger logger = LoggerFactory.getLogger(CompanyResource.class);
+	private final Logger logger = LoggerFactory.getLogger(CustomerResource.class);
 	
 	@Autowired
-	private CompanyService companyService;
+	private CustomerService customerService;
 
-	List<CompanyDto> listCompanyDto = null;
+	List<CustomerDto> listCustomerDto = null;
 	
 	@GetMapping
-	public ResponseEntity<List<CompanyDto>> findAll() {
+	public ResponseEntity<List<CustomerDto>> findAll() {
 		//listAnchoringDto = mapper.readValue(json.toString(), new TypeReference<List<AnchoringDto>>(){});
-		System.out.println("COMPANIES dataplus 2");
-		logger.info("lista de empresas");
+		System.out.println("CUSTOMERS dataplus 2");
+		logger.info("lista de clientes");
 		
-		List<Company> listCompany = companyService.findAll();
-		if(listCompany!=null && listCompany.size() > 0) {
-			listCompanyDto = new ArrayList<>();
-			listCompanyDto = companyService.convertToListDto(listCompany);
+		List<Customer> listCustomer = customerService.findAll();
+		if(listCustomer!=null && listCustomer.size() > 0) {
+			listCustomerDto = new ArrayList<>();
+			listCustomerDto = customerService.convertToListDto(listCustomer);
 		}
-		return new ResponseEntity<List<CompanyDto>>(listCompanyDto,HttpStatus.OK);
+		return new ResponseEntity<List<CustomerDto>>(listCustomerDto,HttpStatus.OK);
 	}
 	
 	@GetMapping(value="{id}")
-	public ResponseEntity<Company> findById(@PathVariable Long id){
-		Company objJson = companyService.findById(id);
+	public ResponseEntity<Customer> findById(@PathVariable Long id){
+		Customer objJson = customerService.findById(id);
 		return ResponseEntity.ok().body(objJson);
 	}
 	
 	
 	@GetMapping("/search")
-		public ResponseEntity<List<Company>> findByName(@RequestParam(name = "name", required = true) String name){
-			List<Company> list = companyService.findByNameLike(name);
+		public ResponseEntity<List<Customer>> findByName(@RequestParam(name = "name", required = true) String name){
+			List<Customer> list = customerService.findByNameLike(name);
 			return ResponseEntity.ok().body(list);
 		}
 	
 	
 	
 	@PostMapping
-	public ResponseEntity<Company> create(@RequestBody Company objJson) {
-		System.out.println("POST COMPANY");
-		objJson = companyService.save(objJson);
+	public ResponseEntity<Customer> create(@RequestBody Customer objJson) {
+		System.out.println("POST CUSTOMER");
+		objJson = customerService.save(objJson);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objJson.getId()).toUri();
 		
@@ -77,30 +77,30 @@ public class CompanyResource {
 	}
 	
 	@PutMapping
-	public ResponseEntity<Company> update(@RequestBody Company objJson){
-		objJson = companyService.save(objJson);
+	public ResponseEntity<Customer> update(@RequestBody Customer objJson){
+		objJson = customerService.save(objJson);
 		return ResponseEntity.ok().body(objJson);
 	}
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
-		companyService.deleteById(id);
+		customerService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping
 	public ResponseEntity<Void> deleteAll(){
-		companyService.deleteAll();
+		customerService.deleteAll();
 		return ResponseEntity.noContent().build();
 	}
 	
 //	@PostMapping("/companies")
-//	public Company create(@RequestBody Company objJson) {
+//	public Customer create(@RequestBody Customer objJson) {
 //		System.out.println("POST COMPANY");
 //		try {
 			
 
-//			return companyService.save(objJson);
+//			return customerService.save(objJson);
 //		} catch (Exception e) {
 			
 //			throw new ExceptionGenericServerException("Erro no Servidor [Inserir Banco] - Exceção: " + e.getMessage());
@@ -108,15 +108,15 @@ public class CompanyResource {
 //	}
 
 //	@PutMapping("/companies")
-//	public Response update(@RequestBody Company objJson) {	
+//	public Response update(@RequestBody Customer objJson) {	
 //		System.out.println("tESTE UPDATE");
 //		
 ////		exDto = new ExceptionMessageDto();
-////		Company company = new Company();
+////		Customer customer = new Customer();
 ////		
 ////		try {			
 ////			if (objJson!=null && objJson.getObjectId() != null) {
-////				company = companyService.update(objJson);
+////				customer = customerService.update(objJson);
 ////			}else {
 ////				exDto.setPath("/api/v1/companies");
 ////				exDto.setError("Objeto com ID inválido [Alterar Empresa]");
@@ -132,7 +132,7 @@ public class CompanyResource {
 ////			return Response.status(500).entity(ret).type("application/json").build();	
 ////		}
 //
-//		//return Response.status(200).entity(company.toString()).type("application/json").build();
+//		//return Response.status(200).entity(customer.toString()).type("application/json").build();
 //		
 //	//	exDto.setPath("/api/v1/companies");
 //	//	exDto.setError("Objeto com ID inválido [Alterar Empresa]");

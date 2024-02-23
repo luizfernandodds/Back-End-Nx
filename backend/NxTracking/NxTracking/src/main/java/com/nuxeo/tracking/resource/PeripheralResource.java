@@ -21,55 +21,62 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.nuxeo.tracking.dto.CompanyDto;
-import com.nuxeo.tracking.model.Company;
-import com.nuxeo.tracking.service.CompanyService;
+import com.nuxeo.tracking.dto.PeripheralDto;
+import com.nuxeo.tracking.model.Peripheral;
+import com.nuxeo.tracking.service.PeripheralService;
 
 @RestController
-@RequestMapping("/api/v1/companies")
+@RequestMapping("/api/v1/peripherals")
 @CrossOrigin(origins="*") 
-public class CompanyResource {
+public class PeripheralResource {
 	
-	private final Logger logger = LoggerFactory.getLogger(CompanyResource.class);
+	private final Logger logger = LoggerFactory.getLogger(PeripheralResource.class);
 	
 	@Autowired
-	private CompanyService companyService;
+	private PeripheralService peripheralService;
 
-	List<CompanyDto> listCompanyDto = null;
+	List<PeripheralDto> listPeripheralDto = null;
 	
 	@GetMapping
-	public ResponseEntity<List<CompanyDto>> findAll() {
+	public ResponseEntity<List<PeripheralDto>> findAll() {
 		//listAnchoringDto = mapper.readValue(json.toString(), new TypeReference<List<AnchoringDto>>(){});
 		System.out.println("COMPANIES dataplus 2");
 		logger.info("lista de empresas");
 		
-		List<Company> listCompany = companyService.findAll();
-		if(listCompany!=null && listCompany.size() > 0) {
-			listCompanyDto = new ArrayList<>();
-			listCompanyDto = companyService.convertToListDto(listCompany);
+		List<Peripheral> listPeripheral = peripheralService.findAll();
+		if(listPeripheral!=null && listPeripheral.size() > 0) {
+			listPeripheralDto = new ArrayList<>();
+			listPeripheralDto = peripheralService.convertToListDto(listPeripheral);
 		}
-		return new ResponseEntity<List<CompanyDto>>(listCompanyDto,HttpStatus.OK);
+		return new ResponseEntity<List<PeripheralDto>>(listPeripheralDto,HttpStatus.OK);
 	}
 	
 	@GetMapping(value="{id}")
-	public ResponseEntity<Company> findById(@PathVariable Long id){
-		Company objJson = companyService.findById(id);
+	public ResponseEntity<Peripheral> findById(@PathVariable Long id){
+		Peripheral objJson = peripheralService.findById(id);
 		return ResponseEntity.ok().body(objJson);
 	}
 	
 	
+//	@GetMapping("/search")
+//		public ResponseEntity<List<Peripheral>> findByCompany(@RequestParam(name = "name", required = true) String name){
+//			List<Peripheral> list = peripheralService.findByNameLike(name);
+//			return ResponseEntity.ok().body(list);
+//		}
+	
 	@GetMapping("/search")
-		public ResponseEntity<List<Company>> findByName(@RequestParam(name = "name", required = true) String name){
-			List<Company> list = companyService.findByNameLike(name);
-			return ResponseEntity.ok().body(list);
-		}
+	public ResponseEntity<List<Peripheral>> findBySerial(@RequestParam(name = "serial", required = true) String serial){
+		List<Peripheral> list = peripheralService.findBySerial(serial);
+		return ResponseEntity.ok().body(list);
+	}
+	
 	
 	
 	
 	@PostMapping
-	public ResponseEntity<Company> create(@RequestBody Company objJson) {
-		System.out.println("POST COMPANY");
-		objJson = companyService.save(objJson);
+	public ResponseEntity<Peripheral> create(@RequestBody Peripheral objJson) {
+		System.out.println("POST PERIPHERAL");
+		objJson = peripheralService.save(objJson);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objJson.getId()).toUri();
 		
@@ -77,30 +84,30 @@ public class CompanyResource {
 	}
 	
 	@PutMapping
-	public ResponseEntity<Company> update(@RequestBody Company objJson){
-		objJson = companyService.save(objJson);
+	public ResponseEntity<Peripheral> update(@RequestBody Peripheral objJson){
+		objJson = peripheralService.save(objJson);
 		return ResponseEntity.ok().body(objJson);
 	}
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
-		companyService.deleteById(id);
+		peripheralService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping
 	public ResponseEntity<Void> deleteAll(){
-		companyService.deleteAll();
+		peripheralService.deleteAll();
 		return ResponseEntity.noContent().build();
 	}
 	
 //	@PostMapping("/companies")
-//	public Company create(@RequestBody Company objJson) {
+//	public Peripheral create(@RequestBody Peripheral objJson) {
 //		System.out.println("POST COMPANY");
 //		try {
 			
 
-//			return companyService.save(objJson);
+//			return peripheralService.save(objJson);
 //		} catch (Exception e) {
 			
 //			throw new ExceptionGenericServerException("Erro no Servidor [Inserir Banco] - Exceção: " + e.getMessage());
@@ -108,15 +115,15 @@ public class CompanyResource {
 //	}
 
 //	@PutMapping("/companies")
-//	public Response update(@RequestBody Company objJson) {	
+//	public Response update(@RequestBody Peripheral objJson) {	
 //		System.out.println("tESTE UPDATE");
 //		
 ////		exDto = new ExceptionMessageDto();
-////		Company company = new Company();
+////		Peripheral peripheral = new Peripheral();
 ////		
 ////		try {			
 ////			if (objJson!=null && objJson.getObjectId() != null) {
-////				company = companyService.update(objJson);
+////				peripheral = peripheralService.update(objJson);
 ////			}else {
 ////				exDto.setPath("/api/v1/companies");
 ////				exDto.setError("Objeto com ID inválido [Alterar Empresa]");
@@ -132,7 +139,7 @@ public class CompanyResource {
 ////			return Response.status(500).entity(ret).type("application/json").build();	
 ////		}
 //
-//		//return Response.status(200).entity(company.toString()).type("application/json").build();
+//		//return Response.status(200).entity(peripheral.toString()).type("application/json").build();
 //		
 //	//	exDto.setPath("/api/v1/companies");
 //	//	exDto.setError("Objeto com ID inválido [Alterar Empresa]");

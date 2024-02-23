@@ -21,55 +21,55 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.nuxeo.tracking.dto.CompanyDto;
-import com.nuxeo.tracking.model.Company;
-import com.nuxeo.tracking.service.CompanyService;
+import com.nuxeo.tracking.dto.DeviceDto;
+import com.nuxeo.tracking.model.Device;
+import com.nuxeo.tracking.service.DeviceService;
 
 @RestController
-@RequestMapping("/api/v1/companies")
+@RequestMapping("/api/v1/devices")
 @CrossOrigin(origins="*") 
-public class CompanyResource {
+public class DeviceResource {
 	
-	private final Logger logger = LoggerFactory.getLogger(CompanyResource.class);
+	private final Logger logger = LoggerFactory.getLogger(DeviceResource.class);
 	
 	@Autowired
-	private CompanyService companyService;
+	private DeviceService deviceService;
 
-	List<CompanyDto> listCompanyDto = null;
+	List<DeviceDto> listDeviceDto = null;
 	
 	@GetMapping
-	public ResponseEntity<List<CompanyDto>> findAll() {
+	public ResponseEntity<List<DeviceDto>> findAll() {
 		//listAnchoringDto = mapper.readValue(json.toString(), new TypeReference<List<AnchoringDto>>(){});
 		System.out.println("COMPANIES dataplus 2");
 		logger.info("lista de empresas");
 		
-		List<Company> listCompany = companyService.findAll();
-		if(listCompany!=null && listCompany.size() > 0) {
-			listCompanyDto = new ArrayList<>();
-			listCompanyDto = companyService.convertToListDto(listCompany);
+		List<Device> listDevice = deviceService.findAll();
+		if(listDevice!=null && listDevice.size() > 0) {
+			listDeviceDto = new ArrayList<>();
+			listDeviceDto = deviceService.convertToListDto(listDevice);
 		}
-		return new ResponseEntity<List<CompanyDto>>(listCompanyDto,HttpStatus.OK);
+		return new ResponseEntity<List<DeviceDto>>(listDeviceDto,HttpStatus.OK);
 	}
 	
 	@GetMapping(value="{id}")
-	public ResponseEntity<Company> findById(@PathVariable Long id){
-		Company objJson = companyService.findById(id);
+	public ResponseEntity<Device> findById(@PathVariable Long id){
+		Device objJson = deviceService.findById(id);
 		return ResponseEntity.ok().body(objJson);
 	}
 	
 	
 	@GetMapping("/search")
-		public ResponseEntity<List<Company>> findByName(@RequestParam(name = "name", required = true) String name){
-			List<Company> list = companyService.findByNameLike(name);
+		public ResponseEntity<List<Device>> findByName(@RequestParam(name = "name", required = true) String name){
+			List<Device> list = deviceService.findByNameLike(name);
 			return ResponseEntity.ok().body(list);
 		}
 	
 	
 	
 	@PostMapping
-	public ResponseEntity<Company> create(@RequestBody Company objJson) {
-		System.out.println("POST COMPANY");
-		objJson = companyService.save(objJson);
+	public ResponseEntity<Device> create(@RequestBody Device objJson) {
+		System.out.println("POST DRIVER");
+		objJson = deviceService.save(objJson);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objJson.getId()).toUri();
 		
@@ -77,30 +77,30 @@ public class CompanyResource {
 	}
 	
 	@PutMapping
-	public ResponseEntity<Company> update(@RequestBody Company objJson){
-		objJson = companyService.save(objJson);
+	public ResponseEntity<Device> update(@RequestBody Device objJson){
+		objJson = deviceService.save(objJson);
 		return ResponseEntity.ok().body(objJson);
 	}
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
-		companyService.deleteById(id);
+		deviceService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping
 	public ResponseEntity<Void> deleteAll(){
-		companyService.deleteAll();
+		deviceService.deleteAll();
 		return ResponseEntity.noContent().build();
 	}
 	
 //	@PostMapping("/companies")
-//	public Company create(@RequestBody Company objJson) {
-//		System.out.println("POST COMPANY");
+//	public Device create(@RequestBody Device objJson) {
+//		System.out.println("POST DRIVER");
 //		try {
 			
 
-//			return companyService.save(objJson);
+//			return deviceService.save(objJson);
 //		} catch (Exception e) {
 			
 //			throw new ExceptionGenericServerException("Erro no Servidor [Inserir Banco] - Exceção: " + e.getMessage());
@@ -108,15 +108,15 @@ public class CompanyResource {
 //	}
 
 //	@PutMapping("/companies")
-//	public Response update(@RequestBody Company objJson) {	
+//	public Response update(@RequestBody Device objJson) {	
 //		System.out.println("tESTE UPDATE");
 //		
 ////		exDto = new ExceptionMessageDto();
-////		Company company = new Company();
+////		Device device = new Device();
 ////		
 ////		try {			
 ////			if (objJson!=null && objJson.getObjectId() != null) {
-////				company = companyService.update(objJson);
+////				device = deviceService.update(objJson);
 ////			}else {
 ////				exDto.setPath("/api/v1/companies");
 ////				exDto.setError("Objeto com ID inválido [Alterar Empresa]");
@@ -132,7 +132,7 @@ public class CompanyResource {
 ////			return Response.status(500).entity(ret).type("application/json").build();	
 ////		}
 //
-//		//return Response.status(200).entity(company.toString()).type("application/json").build();
+//		//return Response.status(200).entity(device.toString()).type("application/json").build();
 //		
 //	//	exDto.setPath("/api/v1/companies");
 //	//	exDto.setError("Objeto com ID inválido [Alterar Empresa]");

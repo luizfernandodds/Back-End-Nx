@@ -10,6 +10,8 @@ import com.nuxeo.tracking.model.Customer;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> { 
+	
+	List<Customer> findByNameContainingIgnoreCase(String name);
 
 	@Query("SELECT o FROM Customer o WHERE o.id = :id AND o.dateDelete IS NULL")
 	Customer findObjectId(Long id); 
